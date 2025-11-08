@@ -1,0 +1,60 @@
+{
+   "name": "@retork/state",
+   "version": "1.0.5",
+   "description": "retork state",
+   "main": "dist/index.js",
+   "module": "dist/index.es.js",
+   "types": "dist/index.d.ts",
+   "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "npx rollup -c",
+      "dev": "npm run build && npm link && cd ./dev && npm link @retork/state && npm run dev",
+      "clean": "rmdir /s /q dist && npm unlink @retork/state && cd ./dev && npm unlink @retork/state",
+      "restart": "npm run clean && npm run dev"
+   },
+   "keywords": [
+      "react",
+      "nextjs",
+      "typescript",
+      "redux",
+      "file",
+      "uploader",
+      "hook"
+   ],
+   "author": "ritesh goswami",
+   "license": "ISC",
+   "type": "module",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/riteshmyhub/@retork/state.git"
+   },
+   "bugs": {
+      "url": "https://github.com/riteshmyhub/@retork/state/issues"
+   },
+   "homepage": "https://github.com/riteshmyhub/@retork/state#readme",
+   "dependencies": {
+      "@types/react": "^19.1.9",
+      "@types/react-dom": "^19.1.7",
+      "immer": "^10.1.1",
+      "react": "^19.1.1",
+      "react-dom": "^19.1.1",
+      "typescript": "^5.9.2"
+   },
+   "devDependencies": {
+      "@rollup/plugin-commonjs": "^28.0.6",
+      "@rollup/plugin-node-resolve": "^16.0.1",
+      "@rollup/plugin-typescript": "^12.1.4",
+      "rollup": "^4.46.2",
+      "tslib": "^2.8.1"
+   },
+   "files": [
+      "dist/**/*"
+   ],
+   "exports": {
+      ".": {
+         "import": "./dist/index.esm.js",
+         "require": "./dist/index.cjs.js",
+         "types": "./dist/index.d.ts"
+      }
+   }
+}
