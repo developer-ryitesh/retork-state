@@ -1,7 +1,7 @@
 # @retork/state
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/riteshmyhub/retork-state/refs/heads/master/dev/public/logo.png" alt="@retork/state logo" width="200" />
+  <img src="https://raw.githubusercontent.com/developer-ryitesh/retork-state/refs/heads/master/dev/public/logo.png" alt="@retork/state logo" width="200" />
 </p>
 
 <p align="center">
