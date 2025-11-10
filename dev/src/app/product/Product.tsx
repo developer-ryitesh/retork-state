@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { useDispatch } from "@retork/state";
+import { useAppDispatch } from "@retork/state";
 import { useAppSelector } from "../store";
 import { fetchProductsApi } from "./product.slice";
 
 export default function Product() {
    const { fetchProducts } = useAppSelector((state) => state.product);
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
 
    useEffect(() => {
       dispatch(fetchProductsApi.api(null));

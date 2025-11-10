@@ -1,9 +1,9 @@
-import { useDispatch } from "@retork/state";
+import { useAppDispatch } from "@retork/state";
 import { useAppSelector } from "../store";
 
 export default function Cart() {
    const { cart } = useAppSelector((state) => state.product);
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
 
    return (
       <div>

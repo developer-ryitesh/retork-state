@@ -157,18 +157,18 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 ### 4. Use in Components
 
-Use the `useSelector` and `useDispatch` hooks to interact with the store in your components.
+Use the `useSelector` and `useAppDispatch` hooks to interact with the store in your components.
 
 ```typescript
 // product/Product.tsx
 import { useEffect } from "react";
-import { useDispatch } from "@retork/state";
+import { useAppDispatch } from "@retork/state";
 import { useAppSelector } from "../store";
 import { fetchProductsApi } from "./product.slice";
 
 export default function Product() {
    const { fetchProducts } = useAppSelector((state) => state.product);
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
 
    useEffect(() => {
       dispatch(fetchProductsApi.api(null));
@@ -192,7 +192,7 @@ export default function Product() {
 // product/Cart.tsx
 function Cart() {
    const { cart } = useAppSelector((state) => state.product);
-   const dispatch = useDispatch();
+   const dispatch = useAppDispatch();
 
    return (
       <div>
@@ -211,7 +211,7 @@ function Cart() {
 | `createStore(config)`              | Creates a new store.                                                             |
 | `createSlice(config)`              | Creates a new slice.                                                             |
 | `useSelector(selector)`            | A React hook that allows you to extract data from the store state.               |
-| `useDispatch()`                    | A React hook that returns the store's `dispatch` function.                       |
+| `useAppDispatch()`                 | A React hook that returns the store's `dispatch` function.                       |
 | `dispatch.withPromise(action)`     | A utility that allows you to dispatch an action and receive a promise in return. |
 | `asyncThunk(type, payloadCreator)` | A utility for creating asynchronous thunks.                                      |
 

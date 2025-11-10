@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { StoreContext } from "../providers";
 
-/* --- [useDispatch hook] --- */
-const useDispatch = () => {
+/* --- [useAppDispatch hook] --- */
+const useAppDispatch = () => {
    const context = useContext(StoreContext);
    if (!context) {
-      throw new Error("useDispatch must be used within a StoreProvider");
+      throw new Error("useAppDispatch must be used within a StoreProvider");
    }
    return context.dispatch;
 };
@@ -19,4 +19,4 @@ function useSelector<State, Selected>(selector: (state: State) => Selected): Sel
    return selector(context.state as State);
 }
 
-export { useDispatch, useSelector };
+export { useAppDispatch, useSelector };
