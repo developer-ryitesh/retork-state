@@ -1,24 +1,14 @@
 import { createStore, useSelector } from "@retork/state";
 import productSlice from "./product/product.slice";
 
-const reducers = {
-   product: productSlice.reducer,
-};
-
-type Reducers = typeof reducers;
-type State = {
-   [K in keyof Reducers]: ReturnType<Reducers[K]>;
-};
-type Middleware = [];
-
-const store = createStore<State, Reducers, Middleware>({
-   reducers: reducers,
+const store = createStore({
+   reducers: {
+      product: productSlice.reducer,
+   },
    middlewares: [],
 });
 
-const useAppSelector = <Selected>(selector: (state: typeof store.initialState) => Selected): Selected => {
-   return useSelector<typeof store.initialState, Selected>(selector);
-};
+type RootState = typeof store.initialState;
+export const useAppSelector = <T>(selector: (state: RootState) => T) => useSelector(selector);
 
-export { useAppSelector };
 export default store;
