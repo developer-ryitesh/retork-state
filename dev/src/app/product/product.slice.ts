@@ -1,4 +1,4 @@
-import { asyncThunk, createSlice, type ActionType } from "@retork/state";
+import { asyncThunk, createSlice, type AsyncReducer } from "@retork/state";
 
 const initialState = {
    fetchProducts: {
@@ -21,23 +21,21 @@ const cartReducer = (state: typeof initialState, action: any) => {
 };
 
 //async reducer
-const fetchProductsApi = {
+const fetchProductsApi: AsyncReducer<typeof initialState> = {
    api: asyncThunk("fetchProducts", async (_) => {
       const res = await fetch("https://api.escuelajs.co/api/v1/products");
-      if (!res.ok) {
-         throw new Error(`HTTP error! Status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       return await res.json();
    }),
-   reducer(state: typeof initialState, action: ActionType<any>) {
-      if (action.type === fetchProductsApi.api.pending) {
+   reducer(state, action) {
+      if (action.type === this.api.pending) {
          state.fetchProducts.isLoading = true;
       }
-      if (action.type === fetchProductsApi.api.fulfilled) {
+      if (action.type === this.api.fulfilled) {
          state.fetchProducts.isLoading = false;
          state.fetchProducts.data = action.payload;
       }
-      if (action.type === fetchProductsApi.api.rejected) {
+      if (action.type === this.api.rejected) {
          state.fetchProducts.isLoading = false;
          state.fetchProducts.data = [];
       }

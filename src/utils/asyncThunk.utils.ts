@@ -1,3 +1,5 @@
+import { ActionType } from "./createSlice.utils";
+
 /* ---  [async Thunk] --- */
 function asyncThunk<T>(type: string, asyncFn: (arg: T, thunkAPI: { dispatch: any }) => Promise<any>) {
    const thunk = (arg: T) => async (dispatch: any) => {
@@ -18,4 +20,9 @@ function asyncThunk<T>(type: string, asyncFn: (arg: T, thunkAPI: { dispatch: any
    });
 }
 
-export { asyncThunk };
+type AsyncReducer<RootState> = {
+   api: ReturnType<typeof asyncThunk>;
+   reducer: (state: RootState, action: ActionType<any>) => void;
+};
+
+export { asyncThunk, type AsyncReducer };

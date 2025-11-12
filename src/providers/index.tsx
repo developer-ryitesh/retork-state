@@ -1,34 +1,27 @@
 import { useReducer, type Dispatch, type ReactNode } from "react";
 import type { createStore } from "../utils/index";
 import { createContext } from "react";
+import { DispatchMiddleware } from "middlewares";
 
 /* --- [StoreContext] --- */
-type StoreContextType = { state: ReturnType<typeof createStore>; dispatch: Dispatch<any> & { withPromise: (action: any) => Promise<any> } };
-export const StoreContext = createContext<StoreContextType>(undefined as any);
+type StoreContextType = {
+   state: ReturnType<typeof createStore>;
+   dispatch: Dispatch<any> & { withPromise: (action: any) => Promise<any> };
+};
 
-/* ---  [Middlewares] --- */
-const thunkMiddleware =
-   ({ dispatch, getState }: any) =>
-   (next: any) =>
-   (action: any) => {
-      if (typeof action === "function") {
-         return action(dispatch, getState);
-      }
-      return next(action);
-   };
+type Props = {
+   children: ReactNode;
+   store: ReturnType<typeof createStore>;
+};
 
-/* ---  [StoreProvider] --- */
-export const StoreProvider = ({ children, store }: { children: ReactNode; store: ReturnType<typeof createStore> }) => {
+//--------StoreContext-----------
+const StoreContext = createContext<StoreContextType>(undefined as any);
+
+//--------StoreProvider-----------
+const StoreProvider = ({ children, store }: Props) => {
    const [state, baseDispatch] = useReducer(store.reducers, store.initialState);
 
-   const coreDispatch = [thunkMiddleware, ...(store.middlewares as any)].reduceRight(
-      (next, mw) =>
-         mw({
-            dispatch: next,
-            getState: () => state,
-         })(next),
-      baseDispatch
-   );
+   const coreDispatch = [DispatchMiddleware, ...(store.middlewares as any)].reduceRight((next, mw) => mw({ dispatch: next, getState: () => state })(next), baseDispatch);
 
    // Add unwrap functionality
    const dispatchWithPromise = Object.assign(coreDispatch, {
@@ -47,6 +40,12 @@ export const StoreProvider = ({ children, store }: { children: ReactNode; store:
 
    return (
       // @ts-ignore
-      <StoreContext.Provider value={{ state, dispatch: dispatchWithPromise }}>{children}</StoreContext.Provider>
+      <StoreContext.Provider value={{ state, dispatch: dispatchWithPromise }}>
+         {/*  */}
+         {children}
+         {/*  */}
+      </StoreContext.Provider>
    );
 };
+
+export { StoreProvider, StoreContext };

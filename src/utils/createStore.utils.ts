@@ -1,6 +1,8 @@
+import type { Middleware } from "middlewares";
+
 type Reducer<S = any, A = any> = (state: S | undefined, action: A) => S;
 
-export function createStore<R extends Record<string, Reducer<any, any>>, M extends any[] = []>(store: { reducers: R; middlewares: M }) {
+export function createStore<R extends Record<string, Reducer<any, any>>>(store: { reducers: R; middlewares: Middleware[] }) {
    // --- Root reducer ---
    const rootReducer = (state: any = {}, action: any) => {
       const nextState: any = {};

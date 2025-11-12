@@ -45,7 +45,7 @@ A slice is a collection of a reducer function, a name, and an initial state valu
 
 ```typescript
 // product/product.slice.ts
-import { asyncThunk, createSlice, type ActionType } from "@retork/state";
+import { asyncThunk, createSlice, type ActionType, type AsyncReducer } from "@retork/state";
 
 const initialState = {
    fetchProducts: {
@@ -67,24 +67,22 @@ const cartReducer = (state: typeof initialState, action: any) => {
    }
 };
 
-// Async reducer
-const fetchProductsApi = {
+// MethodType
+const fetchProductsApi: AsyncReducer<typeof initialState> = {
    api: asyncThunk("fetchProducts", async (_) => {
       const res = await fetch("https://api.escuelajs.co/api/v1/products");
-      if (!res.ok) {
-         throw new Error(`HTTP error! Status: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       return await res.json();
    }),
-   reducer(state: typeof initialState, action: ActionType<any>) {
-      if (action.type === fetchProductsApi.api.pending) {
+   reducer(state, action) {
+      if (action.type === this.api.pending) {
          state.fetchProducts.isLoading = true;
       }
-      if (action.type === fetchProductsApi.api.fulfilled) {
+      if (action.type === this.api.fulfilled) {
          state.fetchProducts.isLoading = false;
          state.fetchProducts.data = action.payload;
       }
-      if (action.type === fetchProductsApi.api.rejected) {
+      if (action.type === this.api.rejected) {
          state.fetchProducts.isLoading = false;
          state.fetchProducts.data = [];
       }
@@ -96,7 +94,7 @@ const productSlice = createSlice({
    initialState: initialState,
    reducer: (...params) => {
       cartReducer(...params);
-      fetchProductsApi.reducer(...params);
+      fetchProducts.reducer(...params);
    },
 });
 
@@ -104,29 +102,45 @@ export { fetchProductsApi };
 export default productSlice;
 ```
 
-### 2. Create a Store
+### 2. Create Middleware
+
+```typescript
+import { type ActionType, type Middleware } from "@retork/state";
+
+const Middleware: Middleware = (_) => (next) => (action: ActionType<any>) => {
+   if (action.type.includes("/fulfilled")) {
+      console.log("Dispatch : " + action.type);
+   }
+   if (action.type.includes("/rejected")) {
+      console.log("Dispatch : " + action.type);
+   }
+   return next(action);
+};
+export { Middleware };
+```
+
+### 3. Create a Store
 
 The store brings together your slices and middleware.
 
 ```typescript
 // app/store.ts
-import { createStore, useSelector } from "@retork/state";
+import { createStore, useSelector, type ActionType } from "@retork/state";
 import productSlice from "./product/product.slice";
 
 const store = createStore({
    reducers: {
       product: productSlice.reducer,
    },
-   middlewares: [],
+   middlewares: [Middleware],
 });
 
-type RootState = typeof store.initialState;
+export type RootState = typeof store.initialState;
 export const useAppSelector = <T>(selector: (state: RootState) => T) => useSelector(selector);
-
 export default store;
 ```
 
-### 3. Provide the Store
+### 4. Provide the Store
 
 Wrap your application with the `StoreProvider` to make the store available to your components.
 
@@ -145,7 +159,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 ```
 
-### 4. Use in Components
+### 5. Use in Components
 
 Use the `useSelector` and `useAppDispatch` hooks to interact with the store in your components.
 
