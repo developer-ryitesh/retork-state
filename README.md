@@ -68,13 +68,13 @@ const cartReducer = (state: typeof initialState, action: any) => {
 };
 
 // MethodType
-const fetchProductsApi: AsyncReducer<typeof initialState> = {
+const fetchProductsApi = {
    api: asyncThunk("fetchProducts", async (_) => {
       const res = await fetch("https://api.escuelajs.co/api/v1/products");
       if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       return await res.json();
    }),
-   reducer(state, action) {
+   reducer(state: typeof initialState, action: ActionType<any>) {
       if (action.type === this.api.pending) {
          state.fetchProducts.isLoading = true;
       }

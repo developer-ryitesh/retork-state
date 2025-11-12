@@ -8,7 +8,7 @@ export default function Product() {
    const dispatch = useAppDispatch();
 
    useEffect(() => {
-      dispatch(fetchProductsApi.api(null));
+      dispatch(fetchProductsApi.api());
    }, []);
 
    if (fetchProducts.isLoading) {
