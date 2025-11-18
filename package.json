@@ -1,6 +1,6 @@
 {
    "name": "@retork/state",
-   "version": "1.0.4",
+   "version": "1.0.5",
    "description": "retork state",
    "main": "dist/index.js",
    "module": "dist/index.es.js",
@@ -8,7 +8,7 @@
    "scripts": {
       "build": "npx rollup -c",
       "clean": "rmdir /s /q dist && npm unlink @retork/state && cd ./dev && npm unlink @retork/state",
-      "dev": "npm run clean && npm run build && npm link && cd ./dev && npm link @retork/state && npm run dev",
+      "dev": "npm run clean & npm run build && npm link && cd ./dev && npm link @retork/state && npm run dev",
       "deploy": "npm run build && npm publish --access public"
    },
    "keywords": [

@@ -1,4 +1,5 @@
 import { asyncThunk, createSlice, type ActionType } from "@retork/state";
+import axios from "axios";
 
 const initialState = {
    fetchProducts: {
@@ -23,9 +24,8 @@ const cartReducer = (state: typeof initialState, action: any) => {
 //async reducer
 const fetchProductsApi = {
    api: asyncThunk("fetchProducts", async (_) => {
-      const res = await fetch("https://api.escuelajs.co/api/v1/products");
-      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-      return await res.json();
+      const { data } = await axios.get("https://api.escuelajs.co/api/v1/products");
+      return data;
    }),
    reducer(state: typeof initialState, action: ActionType<any>) {
       if (action.type === this.api.pending) {
